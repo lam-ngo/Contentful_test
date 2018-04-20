@@ -50,12 +50,25 @@ class App extends Component {
 }
 
 const Product = ({ product }) =>
-  <div>
-    <p>{product.fields.name}</p>
-    <p>From: {product.fields.brand}</p>
-    <p>Image url: {product.fields.image.fields.file.url}</p>
+  <div style={style.container}>
+    <h3>{product.fields.name}</h3>
+    <p>By {product.fields.brand}</p>
+    <p><img src={product.fields.image.fields.file.url} /></p>
     <p>{product.fields.description}</p>
-    <button>Add to cart</button>
+    <button style={style.button}>Add to cart</button>
     <hr/>
   </div>
+
+const style = {
+  container: {
+    width: '400px',
+    textAlign: 'center'
+  },
+  button: {
+    height: '50px',
+    width: '200px',
+    fontSize: '16px',
+    fontWeight: '600'
+  }
+}
 export default App;
