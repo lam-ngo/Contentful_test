@@ -1,16 +1,4 @@
 import React, { Component } from 'react';
-// import createClient directly
-import {createClient} from 'contentful'
-
-const SPACE_ID = '9hlk44cnhhi9';
-const ACCESS_TOKEN = 'db227854e92bf9f0a7d312a03b7bff4525683f855929ba02262d6f1efce7890e';
-
-const client = createClient({
-  // This is the space ID. A space is like a project folder in Contentful terms
-  space: SPACE_ID,
-  // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-  accessToken: ACCESS_TOKEN
-})
 
 class App extends Component {
   constructor(props) {
@@ -25,15 +13,19 @@ class App extends Component {
   }
 
   getProducts() {
-    client.getEntries({
-      content_type: 'product'
+
+    const myRequest = new Request('http://localhost:3005/product');
+
+    fetch(myRequest)
+    .then(response => {
+      return response.json();
     })
-    .then(function(entries) {
-      console.log(entries.items);
+    .then(products => {
+      console.log(products);
       this.setState({
-        products: entries.items
+        products: products
       });
-    }.bind(this))
+    }).catch(err => console.log(`Error: ${err}`))
   }
 
   render() {
@@ -51,10 +43,11 @@ class App extends Component {
 
 const Product = ({ product }) =>
   <div style={style.container}>
-    <h3>{product.fields.name}</h3>
-    <p>By {product.fields.brand}</p>
-    <p><img src={product.fields.image.fields.file.url} /></p>
-    <p>{product.fields.description}</p>
+    <h3>{product.name}</h3>
+    <p>By {product.brand}</p>
+    <p><img src={product.imageUrl} /></p>
+    <p>{product.description}</p>
+    <p>${product.price}</p>
     <button style={style.button}>Add to cart</button>
     <hr/>
   </div>
